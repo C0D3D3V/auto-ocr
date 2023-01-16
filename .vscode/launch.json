@@ -8,7 +8,9 @@
             "program": "${workspaceFolder}/auto-ocr",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/debugging-auto-ocr/",
-            "args": [],
+            "args": [
+                "-pj",
+            ],
             "justMyCode": false
         }
     ]

@@ -19,7 +19,7 @@ setup(
     long_description=readme(),
     long_description_content_type='text/markdown',
     url='https://github.com/c0d3d3v/auto-ocr',
-    author='Colin McCambridge, c0d3d3v',
+    author='c0d3d3v',
     author_email='c0d3d3v@mag-keinen-spam.de',
     license='MIT',
     packages=find_packages(),
@@ -31,8 +31,7 @@ setup(
     },
     python_requires='>=3.7',
     install_requires=[
-'ocrmypdf>=14.0.2',
-'watchdog~=0.10.3'
+        'colorama>=0.4.6',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
