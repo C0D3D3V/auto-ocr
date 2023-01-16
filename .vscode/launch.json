@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Auto OCR",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/auto-ocr",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/debugging-auto-ocr/",
+            "args": [],
+            "justMyCode": false
+        }
+    ]
+}

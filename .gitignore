@@ -1,0 +1,11 @@
+/.idea
+/test
+/debugging-auto-ocr
+__pycache__
+/venv
+/build
+/dist
+/atom_dl.egg-info
+AutoOcr.log
+TODO.md
+/Notes
