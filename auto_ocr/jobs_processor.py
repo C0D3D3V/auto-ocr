@@ -126,6 +126,7 @@ class JobsProcessor:
             else:
                 Log.error(f"ocrmypdf failed {ocr_err}")
                 return False
+        return True
 
     def process_single_dir_job(self, job: Dict, source_dir: str, destination_dir: str, that_job_done_pdfs: List[str]):
         # Job options
@@ -137,7 +138,7 @@ class JobsProcessor:
         if not os.path.isdir(source_dir):
             Log.error(f'{source_dir} does not exist!')
             return
-            
+
         if destination_dir is not None:
             destination_dir = PT.get_abs_path(destination_dir)
             PT.make_dirs(destination_dir)
@@ -151,10 +152,14 @@ class JobsProcessor:
                 if do_ocr:
                     if not self.run_ocr(source_file_path, source_file_name):
                         continue
+                else:
+                    Log.info('Skip ocr file!')
 
                 if copy_mode != 'no_copy':
                     if not self.copy_file(copy_mode, source_file_path, destination_dir, source_file_name):
                         continue
+                else:
+                    Log.info('Skip copy file!')
 
                 now_finished_pdf = [{'filename': source_file_name, 'job_name': job_name}]
                 append_list_to_json(self.path_of_done_pdfs_json, now_finished_pdf)
