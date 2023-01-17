@@ -78,6 +78,8 @@ class JobsProcessor:
                         if ocr_err.returncode == 6:
                             # The file already appears to contain text so it may not need OCR.
                             Log.warning(f"{pdf_name} already contains OCR")
+                        # elif ocr_err.returncode == 7:
+                        #    An error occurred in an external program (child process) and OCRmyPDF cannot continue.
                         else:
                             Log.error(f"ocrmypdf failed {ocr_err}")
                             continue
