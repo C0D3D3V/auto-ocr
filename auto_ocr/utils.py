@@ -416,5 +416,5 @@ class PathTools:
         return str(Path(tempfile.gettempdir()) / 'AutoOcr.running.lock')
 
     @staticmethod
-    def get_path_of_done_pdfs_json():
-        return str(Path(PathTools.get_project_data_directory()) / 'done_pdfs.json')
+    def get_path_of_done_files_json():
+        return str(Path(PathTools.get_project_data_directory()) / 'done_files.json')

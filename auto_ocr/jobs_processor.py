@@ -16,20 +16,20 @@ class JobsProcessor:
         if len(self.job_definitions) == 0:
             Log.warning(f'No Jobs are defined in {path_of_job_defs_json}')
 
-        self.path_of_done_pdfs_json = PT.get_path_of_done_pdfs_json()
-        self.done_pdfs = load_list_from_json(self.path_of_done_pdfs_json)
+        self.path_of_done_files_json = PT.get_path_of_done_files_json()
+        self.all_done_files = load_list_from_json(self.path_of_done_files_json)
 
-    def get_done_pdfs_for_this_job(self, job_name) -> List[str]:
-        that_job_done_pdfs = []
-        for done_pdf in self.done_pdfs:
-            done_pdf_job_name = done_pdf.get('job_name', None)
-            if done_pdf_job_name is None or job_name != done_pdf_job_name:
+    def get_done_filenames_for_this_job(self, job_name) -> List[str]:
+        already_done_filenames = []
+        for done_file in self.all_done_files:
+            done_file_job_name = done_file.get('job_name', None)
+            if done_file_job_name is None or job_name != done_file_job_name:
                 continue
-            done_pdf_filename = done_pdf.get('filename', None)
-            if done_pdf_filename is not None:
-                that_job_done_pdfs.append(done_pdf_filename)
+            done_filename = done_file.get('filename', None)
+            if done_filename is not None:
+                already_done_filenames.append(done_filename)
 
-        return that_job_done_pdfs
+        return already_done_filenames
 
     def job_settings_fine(self, job: Dict) -> bool:
         job_name = job.get('name', None)
@@ -128,7 +128,9 @@ class JobsProcessor:
                 return False
         return True
 
-    def process_single_dir_job(self, job: Dict, source_dir: str, destination_dir: str, that_job_done_pdfs: List[str]):
+    def process_single_dir_job(
+        self, job: Dict, source_dir: str, destination_dir: str, already_done_filenames: List[str]
+    ):
         # Job options
         job_name = job.get('name')
         do_ocr = job.get('do_ocr', True)
@@ -145,7 +147,7 @@ class JobsProcessor:
 
         source_file_names = os.listdir(source_dir)
         for source_file_name in source_file_names:
-            if source_file_name not in that_job_done_pdfs:
+            if source_file_name not in already_done_filenames:
                 Log.info(f'Working on {source_file_name}')
                 source_file_path = PT.make_path(source_dir, source_file_name)
 
@@ -161,8 +163,8 @@ class JobsProcessor:
                 else:
                     Log.info('Skip copy file!')
 
-                now_finished_pdf = [{'filename': source_file_name, 'job_name': job_name}]
-                append_list_to_json(self.path_of_done_pdfs_json, now_finished_pdf)
+                now_finished_file = [{'filename': source_file_name, 'job_name': job_name}]
+                append_list_to_json(self.path_of_done_files_json, now_finished_file)
 
     def process_job(self, job: Dict):
         if not self.job_settings_fine(job):
@@ -181,17 +183,17 @@ class JobsProcessor:
         destination_dir = job.get('destination_dir', None)
 
         job_name = job.get('name')
-        that_job_done_pdfs = self.get_done_pdfs_for_this_job(job_name)
+        already_done_filenames = self.get_done_filenames_for_this_job(job_name)
 
         if source_mode == 'single':
-            self.process_single_dir_job(job, source_dir, destination_dir, that_job_done_pdfs)
+            self.process_single_dir_job(job, source_dir, destination_dir, already_done_filenames)
         elif source_mode == 'multi':
             for source_dir_name in source_dirs:
                 source_dir_path = PT.make_path(source_parent_dir, source_dir_name)
                 destination_dir_path = None
                 if destination_parent_dir is not None:
                     destination_dir_path = PT.make_path(destination_parent_dir, source_dir_name)
-                self.process_single_dir_job(job, source_dir_path, destination_dir_path, that_job_done_pdfs)
+                self.process_single_dir_job(job, source_dir_path, destination_dir_path, already_done_filenames)
 
     def process(self):
         for job in self.job_definitions:
