@@ -76,6 +76,7 @@ class JobsProcessor:
                         )
                     except CalledProcessError as err:
                         Log.error(f"ocrmypdf failed {err}")
+                        continue
 
                 if do_copy:
                     pdf_copy_path = PT.make_path(destination_dir, pdf_name)
@@ -86,6 +87,7 @@ class JobsProcessor:
                             shutil.copyfile(pdf_path, pdf_copy_path)
                         except OSError as copy_err:
                             Log.error(f'Error on copy: {copy_err}')
+                            continue
                     elif copy_mode == 'hardlink':
                         try:
                             if os.path.isfile(pdf_copy_path) and not os.path.samefile(pdf_path, pdf_copy_path):
@@ -99,6 +101,8 @@ class JobsProcessor:
                                 os.link(pdf_path, pdf_copy_path)
                             except OSError as hardlink_err:
                                 Log.error(f'Error while creating hardlink: {hardlink_err}')
+                                continue
+
                         elif os.path.isfile(pdf_copy_path) and os.path.samefile(pdf_path, pdf_copy_path):
                             Log.info('Destination file does already exist, creating hardlink is skipped.')
 
