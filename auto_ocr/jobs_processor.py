@@ -84,13 +84,23 @@ class JobsProcessor:
                     if copy_mode == 'copy':
                         try:
                             shutil.copyfile(pdf_path, pdf_copy_path)
-                        except OSError as err:
-                            Log.error(f'Error on copy: {err}')
+                        except OSError as copy_err:
+                            Log.error(f'Error on copy: {copy_err}')
                     elif copy_mode == 'hardlink':
                         try:
-                            os.link(pdf_path, pdf_copy_path)
-                        except OSError as err:
-                            Log.error(f'Error on hardlink: {err}')
+                            if os.path.isfile(pdf_copy_path) and not os.path.samefile(pdf_path, pdf_copy_path):
+                                Log.warning('Destination file does already exist, file will be deleted')
+                                os.remove(pdf_copy_path)
+                        except OSError as remove_err:
+                            Log.error(f'Error while removing destination file: {remove_err}')
+
+                        if not os.path.isfile(pdf_copy_path):
+                            try:
+                                os.link(pdf_path, pdf_copy_path)
+                            except OSError as hardlink_err:
+                                Log.error(f'Error while creating hardlink: {hardlink_err}')
+                        elif os.path.isfile(pdf_copy_path) and os.path.samefile(pdf_path, pdf_copy_path):
+                            Log.info('Destination file does already exist, creating hardlink is skipped.')
 
                 now_finished_pdf = [{'filename': pdf_name, 'job_name': job_name}]
                 append_list_to_json(self.path_of_done_pdfs_json, now_finished_pdf)
