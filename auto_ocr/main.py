@@ -97,7 +97,7 @@ def get_parser():
     group.add_argument(
         '--version',
         action='version',
-        version='atom-dl ' + __version__,
+        version='auto-ocr ' + __version__,
         help='Print program version and exit',
     )
 

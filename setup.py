@@ -2,8 +2,8 @@ from os import path
 from setuptools import setup, find_packages
 
 
-# Get the version from atom_dl/version.py without importing the package
-exec(compile(open('atom_dl/version.py').read(), 'atom_dl/version.py', 'exec'))
+# Get the version from auto_ocr/version.py without importing the package
+exec(compile(open('auto_ocr/version.py').read(), 'auto_ocr/version.py', 'exec'))
 
 
 def readme():

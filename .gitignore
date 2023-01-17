@@ -5,7 +5,7 @@ __pycache__
 /venv
 /build
 /dist
-/atom_dl.egg-info
+/auto_ocr.egg-info
 AutoOcr.log
 TODO.md
 /Notes
