@@ -1,5 +1,9 @@
 import os
+import subprocess
+import shutil
+
 from typing import Dict, List
+from subprocess import CalledProcessError
 
 from auto_ocr.utils import PathTools as PT, Log, append_list_to_json, load_list_from_json
 
@@ -41,15 +45,34 @@ class JobsProcessor:
         PT.make_dirs(destination_dir)
 
         that_job_done_pdfs = self.get_done_pdfs_for_this_job(job_name)
-        now_finished_pdfs = []
 
         pdf_names = os.listdir(source_dir)
         for pdf_name in pdf_names:
             if pdf_name not in that_job_done_pdfs:
-                print(pdf_name)
-                now_finished_pdfs.append({'filename': pdf_name, 'job_name': job_name})
+                Log.info(f'Running OCR on {pdf_name}')
+                pdf_path = PT.make_path(source_dir, pdf_name)
+                try:
+                    subprocess.run(
+                        [
+                            'ocrmypdf',
+                            '-l',
+                            'deu',
+                            pdf_path,
+                            pdf_path,
+                        ],
+                        check=True,
+                    )
+                except CalledProcessError as err:
+                    Log.info(f"ocrmypdf failed {err}")
 
-        append_list_to_json(self.path_of_done_pdfs_json, now_finished_pdfs)
+                pdf_copy_path = PT.make_path(destination_dir, pdf_name)
+                try:
+                    shutil.copyfile(pdf_path, pdf_copy_path)
+                except OSError as err:
+                    Log.error(f'Error on copy: {err}')
+
+                now_finished_pdf = [{'filename': pdf_name, 'job_name': job_name}]
+                append_list_to_json(self.path_of_done_pdfs_json, now_finished_pdf)
 
     def process(self):
         for job in self.job_definitions:
