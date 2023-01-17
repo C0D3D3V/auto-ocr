@@ -74,9 +74,13 @@ class JobsProcessor:
                             ],
                             check=True,
                         )
-                    except CalledProcessError as err:
-                        Log.error(f"ocrmypdf failed {err}")
-                        continue
+                    except CalledProcessError as ocr_err:
+                        if ocr_err.returncode == 6:
+                            # The file already appears to contain text so it may not need OCR.
+                            Log.warning(f"{pdf_name} already contains OCR")
+                        else:
+                            Log.error(f"ocrmypdf failed {ocr_err}")
+                            continue
 
                 if do_copy:
                     pdf_copy_path = PT.make_path(destination_dir, pdf_name)
@@ -104,7 +108,7 @@ class JobsProcessor:
                                 continue
 
                         elif os.path.isfile(pdf_copy_path) and os.path.samefile(pdf_path, pdf_copy_path):
-                            Log.info('Destination file does already exist, creating hardlink is skipped.')
+                            Log.info(f'Destination file is already a hardlink of {pdf_name}')
 
                 now_finished_pdf = [{'filename': pdf_name, 'job_name': job_name}]
                 append_list_to_json(self.path_of_done_pdfs_json, now_finished_pdf)
