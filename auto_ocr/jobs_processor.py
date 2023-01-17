@@ -34,42 +34,63 @@ class JobsProcessor:
     def process_job(self, job: Dict):
         source_dir = job.get('source_dir', None)
         destination_dir = job.get('destination_dir', None)
+        do_ocr = job.get('do_ocr', True)
+        copy_mode = job.get('copy_mode', 'hardlink')
         job_name = job.get('name', None)
-        if source_dir is None or destination_dir is None or job_name is None:
-            Log.error('source_dir or destination_dir not set for job')
+        if source_dir is None or job_name is None:
+            Log.error('source_dir or job_name not set for job')
             return
 
         source_dir = PT.get_abs_path(source_dir)
         PT.make_dirs(source_dir)
-        destination_dir = PT.get_abs_path(destination_dir)
-        PT.make_dirs(destination_dir)
+
+        do_copy = False
+        if destination_dir is None:
+            Log.error('destination_dir is not set for job, files will not be copied')
+            do_copy = False
+        else:
+            destination_dir = PT.get_abs_path(destination_dir)
+            PT.make_dirs(destination_dir)
+            do_copy = True
 
         that_job_done_pdfs = self.get_done_pdfs_for_this_job(job_name)
 
         pdf_names = os.listdir(source_dir)
         for pdf_name in pdf_names:
             if pdf_name not in that_job_done_pdfs:
-                Log.info(f'Running OCR on {pdf_name}')
-                pdf_path = PT.make_path(source_dir, pdf_name)
-                try:
-                    subprocess.run(
-                        [
-                            'ocrmypdf',
-                            '-l',
-                            'deu',
-                            pdf_path,
-                            pdf_path,
-                        ],
-                        check=True,
-                    )
-                except CalledProcessError as err:
-                    Log.info(f"ocrmypdf failed {err}")
+                Log.info(f'Working on {pdf_name}')
 
-                pdf_copy_path = PT.make_path(destination_dir, pdf_name)
-                try:
-                    shutil.copyfile(pdf_path, pdf_copy_path)
-                except OSError as err:
-                    Log.error(f'Error on copy: {err}')
+                if do_ocr:
+                    Log.info(f'Running OCR on {pdf_name}')
+                    pdf_path = PT.make_path(source_dir, pdf_name)
+                    try:
+                        subprocess.run(
+                            [
+                                'ocrmypdf',
+                                '-l',
+                                'deu',
+                                pdf_path,
+                                pdf_path,
+                            ],
+                            check=True,
+                        )
+                    except CalledProcessError as err:
+                        Log.info(f"ocrmypdf failed {err}")
+
+                if do_copy:
+                    pdf_copy_path = PT.make_path(destination_dir, pdf_name)
+                    Log.info(f'Copy {pdf_name} to {pdf_copy_path}')
+                    Log.info(f'Copy mode: {copy_mode}')
+                    if copy_mode == 'copy':
+                        try:
+                            shutil.copyfile(pdf_path, pdf_copy_path)
+                        except OSError as err:
+                            Log.error(f'Error on copy: {err}')
+                    elif copy_mode == 'hardlink':
+                        try:
+                            os.link(pdf_path, pdf_copy_path)
+                        except OSError as err:
+                            Log.error(f'Error on hardlink: {err}')
 
                 now_finished_pdf = [{'filename': pdf_name, 'job_name': job_name}]
                 append_list_to_json(self.path_of_done_pdfs_json, now_finished_pdf)
