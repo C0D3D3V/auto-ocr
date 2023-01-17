@@ -75,7 +75,7 @@ class JobsProcessor:
                             check=True,
                         )
                     except CalledProcessError as err:
-                        Log.info(f"ocrmypdf failed {err}")
+                        Log.error(f"ocrmypdf failed {err}")
 
                 if do_copy:
                     pdf_copy_path = PT.make_path(destination_dir, pdf_name)
