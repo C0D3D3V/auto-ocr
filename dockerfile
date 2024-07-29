@@ -11,7 +11,7 @@ ARG PGID=1000
 RUN groupadd -g ${PGID} -r auto-ocr && useradd -u ${PUID} -r -g auto-ocr -m -s /bin/bash auto-ocr
 
 # Setze Arbeitsverzeichnis innerhalb des Containers
-WORKDIR /app
+WORKDIR /app_auto_ocr
 
 # Kopiere den gesamten aktuellen Code in das Arbeitsverzeichnis
 COPY . .
@@ -20,7 +20,7 @@ COPY . .
 RUN pip install .
 
 # Change ownership of the application directory
-RUN chown -R auto-ocr:auto-ocr /app
+RUN chown -R auto-ocr:auto-ocr /app_auto_ocr
 RUN chown -R auto-ocr:auto-ocr /home/auto-ocr/
 
 # Switch to the non-root user
