@@ -2,7 +2,7 @@
 FROM jbarlow83/ocrmypdf:latest
 #FROM python:3.11-slim
 
-RUN apt install tesseract-ocr-deu
+RUN apt update &&  apt install -y tesseract-ocr-deu
 
 # Define build-time arguments for user ID and group ID
 ARG PUID=622
@@ -21,6 +21,9 @@ COPY . .
 # Installiere Abhängigkeiten
 RUN pip install .
 
+# Set the umask permanently for the user
+RUN echo "umask ${UMASK}" >> /home/auto-ocr/.bashrc
+
 # Change ownership of the application directory
 RUN chown -R auto-ocr:auto-ocr /app_auto_ocr
 RUN chown -R auto-ocr:auto-ocr /home/auto-ocr/
@@ -33,5 +36,4 @@ RUN mkdir -p /home/auto-ocr/.config/auto-ocr
 
 
 # Startbefehl für das Python-Skript
-# ENTRYPOINT ["auto-ocr"]
-ENTRYPOINT ["sh", "-c", "umask ${UMASK} && auto-ocr"]
+ENTRYPOINT ["auto-ocr"]
