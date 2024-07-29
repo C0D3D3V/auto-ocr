@@ -119,9 +119,9 @@ Example job definition:
     "copy_mode": "hard_link",
     "output_mode": "mirror_tree",
     "input_mode": "deep_tree",
-    "do_ocr": True,
-    "use_done_file_names_list": False,
-    "delete_source_at_end": True,
+    "do_ocr": true,
+    "use_done_file_names_list": false,
+    "delete_source_at_end": true
 }]'''
             )
 
