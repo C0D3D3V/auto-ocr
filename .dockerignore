@@ -6,3 +6,4 @@
 !LICENSE
 !auto-ocr
 !**/*.py
+!docker-entrypoint.sh
