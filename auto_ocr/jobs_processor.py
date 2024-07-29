@@ -113,15 +113,15 @@ class JobsProcessor:
                 '''
 Example job definition:
 [{
-    'name': 'MyBackupJob',
-    'sources': '/path/to/source',
-    'destinations': ['/path/to/destination1', '/path/to/destination2'],
-    'copy_mode': 'hard_link',
-    'output_mode': 'mirror_tree',
-    'input_mode': 'deep_tree',
-    'do_ocr': True,
-    'use_done_file_names_list': False,
-    'delete_source_at_end': True,
+    "name": "MyBackupJob",
+    "sources": "/path/to/source",
+    "destinations": ["/path/to/destination1", "/path/to/destination2"],
+    "copy_mode": "hard_link",
+    "output_mode": "mirror_tree",
+    "input_mode": "deep_tree",
+    "do_ocr": True,
+    "use_done_file_names_list": False,
+    "delete_source_at_end": True,
 }]'''
             )
 
