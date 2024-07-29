@@ -109,6 +109,21 @@ class JobsProcessor:
 
         if len(self.job_definitions) == 0:
             logging.warning("No Jobs are defined in %s", path_of_job_defs_json)
+            logging.info(
+                '''
+Example job definition:
+[{
+    'name': 'MyBackupJob',
+    'sources': '/path/to/source',
+    'destinations': ['/path/to/destination1', '/path/to/destination2'],
+    'copy_mode': 'hard_link',
+    'output_mode': 'mirror_tree',
+    'input_mode': 'deep_tree',
+    'do_ocr': True,
+    'use_done_file_names_list': False,
+    'delete_source_at_end': True,
+}]'''
+            )
 
         self.path_of_done_files_json = PT.get_path_of_done_files_json()
         self.all_done_files = load_list_from_json(self.path_of_done_files_json)

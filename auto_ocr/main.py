@@ -6,6 +6,7 @@ import logging
 import sys
 import traceback
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
 import colorlog
 from colorama import just_fix_windows_console
