@@ -153,11 +153,11 @@ Example job definition:
             destination_file_path = destination_dir / sub_source_dir / file_name
         elif job.output_mode == OutputMode.SINGLE_FOLDER:
             destination_file_path = destination_dir / file_name
-        destination_file_path.mkdir(parents=True, exist_ok=True)
+        destination_file_path.parent.mkdir(parents=True, exist_ok=True)
 
         source_file_path = source_dir / sub_source_dir / file_name
 
-        logging.info("Copy %r to %r", file_name, destination_file_path)
+        logging.info("Copy %r to %s", file_name, destination_file_path)
         logging.info("Copy mode: %s", job.copy_mode.value)
 
         if job.copy_mode == CopyMode.COPY:
