@@ -34,6 +34,7 @@ setup(
         "colorama>=0.4.6",
         "colorlog>=6.7.0",
         "ocrmypdf>=16.4.2",
+        "orjson>=3.10.6",
     ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",

@@ -5,23 +5,15 @@ import argparse
 import logging
 import sys
 import traceback
-import colorlog
-
 from logging.handlers import RotatingFileHandler
 
-
+import colorlog
 from colorama import just_fix_windows_console
 
 from auto_ocr.jobs_processor import JobsProcessor
-
-from auto_ocr.utils import (
-    check_debug,
-    check_verbose,
-    LockError,
-    PathTools as PT,
-    process_lock,
-    process_unlock,
-)
+from auto_ocr.utils import LockError
+from auto_ocr.utils import PathTools as PT
+from auto_ocr.utils import check_debug, check_verbose, process_lock, process_unlock
 from auto_ocr.version import __version__
 
 
@@ -38,7 +30,7 @@ class ReRaiseOnError(logging.StreamHandler):
 
 def setup_logger(args):
     file_log_handler = RotatingFileHandler(
-        PT.make_path(args.log_file_path, "AutoOCR.log"),
+        Path(args.log_file_path) / "AutoOCR.log",
         mode="a",
         maxBytes=1 * 1024 * 1024,
         backupCount=2,
@@ -46,17 +38,11 @@ def setup_logger(args):
         delay=0,
     )
     file_log_handler.setFormatter(
-        logging.Formatter(
-            "%(asctime)s  %(levelname)s  {%(module)s}  %(message)s", "%Y-%m-%d %H:%M:%S"
-        )
+        logging.Formatter("%(asctime)s  %(levelname)s  {%(module)s}  %(message)s", "%Y-%m-%d %H:%M:%S")
     )
     stdout_log_handler = colorlog.StreamHandler()
     if sys.stdout.isatty() and not args.verbose:
-        stdout_log_handler.setFormatter(
-            colorlog.ColoredFormatter(
-                "%(log_color)s%(asctime)s %(message)s", "%H:%M:%S"
-            )
-        )
+        stdout_log_handler.setFormatter(colorlog.ColoredFormatter("%(log_color)s%(asctime)s %(message)s", "%H:%M:%S"))
     else:
         stdout_log_handler.setFormatter(
             colorlog.ColoredFormatter(
@@ -100,14 +86,10 @@ def get_parser():
     def _dir_path(path):
         if os.path.isdir(path):
             return path
-        raise argparse.ArgumentTypeError(
-            f'"{str(path)}" is not a valid path. Make sure the directory exists.'
-        )
+        raise argparse.ArgumentTypeError(f'"{str(path)}" is not a valid path. Make sure the directory exists.')
 
     parser = argparse.ArgumentParser(
-        description=(
-            "Auto OCR - Tool to automatically OCR PDFs and copy them to a folder"
-        )
+        description=("Auto OCR - Tool to automatically OCR PDFs and copy them to a folder")
     )
     group = parser.add_mutually_exclusive_group(required=True)
 
