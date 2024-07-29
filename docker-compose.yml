@@ -6,6 +6,8 @@ services:
       args:
         - PUID=${PUID}
         - PGID=${PGID}
+    environment:
+      - UMASK=${UMASK}
     container_name: auto-ocr-pj
     volumes:
       - ./app-auto-ocr/data:/home/auto-ocr/.local/share/auto-ocr
