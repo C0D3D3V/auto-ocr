@@ -20,9 +20,6 @@ COPY . .
 # Installiere Abhängigkeiten
 RUN pip install .
 
-# Set the umask permanently for the user
-RUN echo "umask ${UMASK}" >> /home/auto-ocr/.bashrc
-
 # Change ownership of the application directory
 RUN chown -R auto-ocr:auto-ocr /app_auto_ocr
 RUN chown -R auto-ocr:auto-ocr /home/auto-ocr/
@@ -33,9 +30,6 @@ USER auto-ocr
 RUN mkdir -p /home/auto-ocr/.local/share/auto-ocr
 RUN mkdir -p /home/auto-ocr/.config/auto-ocr
 
-# Copy the entrypoint script and make it executable
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Use the custom entrypoint script
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/app_auto_ocr/docker-entrypoint.sh"]
