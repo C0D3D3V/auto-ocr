@@ -1,0 +1,8 @@
+# Use Dockerignore as whitelist
+*
+
+
+!README.md
+!LICENSE
+!auto-ocr
+!**/*.py
