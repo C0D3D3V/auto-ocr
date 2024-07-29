@@ -7,6 +7,7 @@ RUN apt install tesseract-ocr-deu
 # Define build-time arguments for user ID and group ID
 ARG PUID=622
 ARG PGID=1000
+ARG UMASK=022
 
 # Create a user group and a user to run the application
 RUN groupadd -g ${PGID} -r auto-ocr && useradd -u ${PUID} -r -g auto-ocr -m -s /bin/bash auto-ocr
@@ -32,4 +33,5 @@ RUN mkdir -p /home/auto-ocr/.config/auto-ocr
 
 
 # Startbefehl für das Python-Skript
-ENTRYPOINT ["auto-ocr"]
+# ENTRYPOINT ["auto-ocr"]
+ENTRYPOINT ["sh", "-c", "umask ${UMASK} && auto-ocr"]
