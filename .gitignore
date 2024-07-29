@@ -9,3 +9,4 @@ __pycache__
 AutoOcr.log
 TODO.md
 /Notes
+.env
