@@ -12,4 +12,4 @@ services:
       - ./app-auto-ocr/config:/home/auto-ocr/.config/auto-ocr
       - ${AUTO_OCR_SOURCE_AND_DESTINATION}:/auto-ocr-data
       - "/etc/localtime:/etc/localtime:ro"
-    command: ["auto-ocr", "-plf"]
+    command: ["-pj"]

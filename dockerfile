@@ -1,5 +1,6 @@
 # Basisimage
 FROM jbarlow83/ocrmypdf:latest
+#FROM python:3.11-slim
 
 RUN apt install tesseract-ocr-deu
 
@@ -31,4 +32,4 @@ RUN mkdir -p /home/auto-ocr/.config/auto-ocr
 
 
 # Startbefehl für das Python-Skript
-CMD ["auto-ocr", "-h"]
+ENTRYPOINT ["auto-ocr"]
