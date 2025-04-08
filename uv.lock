@@ -4,6 +4,7 @@ requires-python = ">=3.10"
 
 [[package]]
 name = "auto-ocr"
+version = "0.0.6"
 source = { editable = "." }
 dependencies = [
     { name = "colorama" },
