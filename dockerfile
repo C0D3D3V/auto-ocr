@@ -3,6 +3,7 @@ FROM jbarlow83/ocrmypdf:latest
 #FROM python:3.11-slim
 
 RUN apt update &&  apt install -y tesseract-ocr-deu
+RUN apt install -y python3-pip
 
 # Define build-time arguments for user ID and group ID
 ARG PUID=622
@@ -19,7 +20,7 @@ WORKDIR /app_auto_ocr
 COPY . .
 
 # Installiere Abhängigkeiten
-RUN pip install .
+RUN pip3 install .
 
 # Change ownership of the application directory
 RUN chown -R auto-ocr:auto-ocr /app_auto_ocr
