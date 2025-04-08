@@ -18,17 +18,15 @@ WORKDIR /app_auto_ocr
 
 # Installiere Abhängigkeiten
 #RUN pip install .
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project --no-dev
+#RUN --mount=type=cache,target=/root/.cache/uv \
+#    --mount=type=bind,source=uv.lock,target=uv.lock \
+#    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+#    uv sync --frozen --no-install-project --no-dev
 
 # Then, add the rest of the project source code and install it
 COPY . .
 # Installing separately from its dependencies allows optimal layer caching 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen \
-        --no-dev
+RUN uv sync --frozen --no-dev
 
 # Change ownership of the application directory
 RUN chown -R auto-ocr:auto-ocr /app_auto_ocr

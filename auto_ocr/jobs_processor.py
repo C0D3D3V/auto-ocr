@@ -154,7 +154,7 @@ Example job definition:
         elif job.output_mode == OutputMode.SINGLE_FOLDER:
             destination_file_path = destination_dir / file_name
         else:
-            logging.error("OutputMode is unknown: %s", job.output_mode)
+            logging.error("Output mode is unknown: %s", job.output_mode)
             return False
 
         destination_file_path.parent.mkdir(parents=True, exist_ok=True)
