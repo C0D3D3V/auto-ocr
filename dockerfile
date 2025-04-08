@@ -50,5 +50,8 @@ RUN mkdir -p /home/auto-ocr/.local/share/auto-ocr
 RUN mkdir -p /home/auto-ocr/.config/auto-ocr
 
 
+ENV PATH="/app/.venv/bin:${PATH}"
+ENV PATH="/app_auto_ocr/.venv/bin:${PATH}"
+
 # Use the custom entrypoint script
 ENTRYPOINT ["/app_auto_ocr/docker-entrypoint.sh"]
