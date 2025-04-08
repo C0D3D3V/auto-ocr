@@ -8,6 +8,7 @@
 .ipynb_checkpoints/
 .mypy_cache/
 .pytest_cache/
+__pycache__/
 
 # Dev scratch
 *.ipynb
@@ -26,6 +27,11 @@ venv*/
 /private
 /coverage.xml
 /issuepdf
+/test
+/Notes
+TODO.md
+/debugging-auto-ocr
+
 
 # Package building
 *.egg-info/
@@ -46,12 +52,7 @@ auto_ocr/_version.py
 
 .idea/
  
-# Test files
-/test
-/debugging-auto-ocr
-__pycache__
+# Auto-Ocr-Files
 AutoOcr.log
-TODO.md
-/Notes
 .env
 /app-auto-ocr

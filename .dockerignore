@@ -1,9 +1,56 @@
-# Use Dockerignore as whitelist
-*
 
 
-!README.md
-!LICENSE
-!auto-ocr
-!**/*.py
-!docker-entrypoint.sh
+# dotfiles
+.*
+!.coveragerc
+!.dockerignore
+!.git_archival.txt
+!.gitattributes
+!.gitignore
+!.pre-commit-config.yaml
+!.readthedocs.yml
+__pycache__/
+
+# Dev scratch
+*.ipynb
+**/*.pyc
+/*.pdf
+/*.qdf
+/*.png
+/scratch.py
+IDEAS
+log/
+tests/resources/private/
+tmp/
+venv*/
+/debug_tests.py
+*.traineddata
+/private
+/test
+/Notes
+TODO.md
+/debugging-auto-ocr
+
+# Package building
+*.egg-info/
+build/
+dist/
+wheelhouse/
+pip-wheel-metadata/
+
+# Code coverage
+htmlcov/
+
+# Docker specific
+bin/
+docs/
+include/
+lib/
+ 
+# Auto-Ocr-Files
+AutoOcr.log
+.env
+/app-auto-ocr
+
+# Docker include .git/
+!.git/
