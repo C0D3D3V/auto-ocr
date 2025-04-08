@@ -38,8 +38,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 RUN rm -rf /app_auto_ocr/.git 
 
 # Change ownership of the application directory
-RUN chown -R auto-ocr:auto-ocr /app_auto_ocr
-RUN chown -R auto-ocr:auto-ocr /home/auto-ocr/
+#RUN chown -R auto-ocr:auto-ocr /app_auto_ocr
+#RUN chown -R auto-ocr:auto-ocr /home/auto-ocr/
+RUN chown -R auto-ocr:1000 /app_auto_ocr
+RUN chown -R auto-ocr:1000 /home/auto-ocr/
 
 # Switch to the non-root user
 USER auto-ocr
