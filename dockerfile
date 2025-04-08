@@ -9,7 +9,8 @@ ARG PUID=622
 ARG PGID=1000
 
 # Create a user group and a user to run the application
-RUN groupadd -g ${PGID} -r auto-ocr && useradd -u ${PUID} -r -g auto-ocr -m -s /bin/bash auto-ocr
+# groupadd -g ${PGID} -r auto-ocr
+RUN useradd -u ${PUID} -r -g ${PGID} -m -s /bin/bash auto-ocr
 
 # Setze Arbeitsverzeichnis innerhalb des Containers
 WORKDIR /app_auto_ocr
