@@ -48,7 +48,6 @@ docs/_build/
 docs/_static/
 docs/_templates/
 docs/Makefile
-auto_ocr/_version.py
 
 .idea/
  

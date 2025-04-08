@@ -35,6 +35,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen \
         --no-dev
 
+RUN rm -rf /app_auto_ocr/.git 
+
 # Change ownership of the application directory
 RUN chown -R auto-ocr:auto-ocr /app_auto_ocr
 RUN chown -R auto-ocr:auto-ocr /home/auto-ocr/
