@@ -16,6 +16,11 @@ RUN useradd -u ${PUID} -r -g ${PGID} -m -s /bin/bash auto-ocr
 WORKDIR /app_auto_ocr
 
 
+# Copy uv from ghcr
+COPY --from=ghcr.io/astral-sh/uv:0.5.5 /uv /uvx /bin/
+
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
+
 # Installiere Abhängigkeiten
 #RUN pip install .
 RUN --mount=type=cache,target=/root/.cache/uv \
