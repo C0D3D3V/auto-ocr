@@ -153,6 +153,10 @@ Example job definition:
             destination_file_path = destination_dir / sub_source_dir / file_name
         elif job.output_mode == OutputMode.SINGLE_FOLDER:
             destination_file_path = destination_dir / file_name
+        else:
+            logging.error("OutputMode is unknown: %s", job.output_mode)
+            return False
+
         destination_file_path.parent.mkdir(parents=True, exist_ok=True)
 
         source_file_path = source_dir / sub_source_dir / file_name
@@ -204,6 +208,10 @@ Example job definition:
             if ocr_err.returncode == 6:
                 # The file already appears to contain text so it may not need OCR.
                 logging.warning("%s already contains OCR", source_file_path.name)
+            elif ocr_err.returncode == 8:
+                # The input PDF is encrypted. OCRmyPDF does not read encrypted PDFs.
+                # Use another program such as qpdf to remove encryption.
+                logging.warning("%s is encrypted", source_file_path.name)
             else:
                 logging.error("ocrmypdf failed %s", ocr_err)
                 return False
